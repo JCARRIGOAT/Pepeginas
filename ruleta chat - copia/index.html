@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ruleta de Premios</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    nav a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #333;
+    }
+    #intentosRestantes {
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    #botonRuleta {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sección de enlaces -->
+  <header>
+    <nav>
+      <a href="https://www.instagram.com/pepeginas_dgo_jardines_?igsh=MTBrcmJ1b3ZwaTlyOQ%3D%3D&utm_source=qr" target="_blank">Instagram</a> |
+      <a href="https://maps.google.com/?q=Autolavado%20Djr%20Detallado%20Automotriz,%20Universidad%20Aut%C3%B3noma%20de%20Durango%20LB,%20Hacienda%20de%20Fray%20Diego,%2034200%20Durango,%20Dgo.&ftid=0x869bb741f4ba5c33:0x6a2e4ff9507eea82&entry=gps&lucs=,94262773,94242595,94224825,94227247,94227248,47071704,47069508,94218641,94203019,47084304,94208458,94208447&skid=A812A3A0-B6DD-4A99-B320-BD0255476A5D&g_st=com.google.maps.preview.copy" target="_blank">Ubicación</a>
+    </nav>
+  </header>
+
+  <!-- Sección de la ruleta -->
+  <section id="ruleta">
+    <h2>Ruleta de Premios</h2>
+  </section>
+
+  <!-- Mostrar intentos restantes -->
+  <div id="intentosRestantes"></div>
+
+  <!-- Botón para girar la ruleta -->
+  <button id="botonRuleta">Girar Ruleta</button>
+
+  <script>
+    // Definición de premios y probabilidades
+    const premios = [
+      { nombre: "2x1 en chilaquiles", probabilidad: 25, descripcion: "Solo aplica para chilaquiles verdes y rojos de agua (no de crema).", contacto: "Número: 123-456-7890, Dirección: Calle Ejemplo, 123" },
+      { nombre: "3x2 en chilaquiles de crema", probabilidad: 20, descripcion: "En la compra de 2 chilaquiles de crema, el tercero (de agua, verdes o rojos) es gratis.", contacto: "Número: 123-456-7890, Dirección: Calle Ejemplo, 123" },
+      { nombre: "Descuento para foráneos", probabilidad: 15, descripcion: "Si un estudiante foráneo compra chilaquiles de crema y comprueba su condición, los suyos salen a mitad de precio.", contacto: "Número: 123-456-7890, Dirección: Calle Ejemplo, 123" },
+      { nombre: "Chilaquiles de agua gratis", probabilidad: 10, descripcion: "Solo aplica para chilaquiles verdes y rojos de agua.", contacto: "Número: 123-456-7890, Dirección: Calle Ejemplo, 123" },
+      { nombre: "20% de descuento en la cuenta total", probabilidad: 10, descripcion: "Aplica en la compra de cualquier platillo.", contacto: "Número: 123-456-7890, Dirección: Calle Ejemplo, 123" },
+      { nombre: "Bebida gratis", probabilidad: 10, descripcion: "Escoge cualquier bebida del menú.", contacto: "Número: 123-456-7890, Dirección: Calle Ejemplo, 123" },
+      { nombre: "Paga con historias", probabilidad: 10, descripcion: "Requiere que el cliente muestre su perfil para comprobar seguidores.", contacto: "Número: 123-456-7890, Dirección: Calle Ejemplo, 123" }
+    ];
+
+    // Función para obtener el premio basado en probabilidades
+    function obtenerPremio() {
+      let totalProbabilidad = 0;
+      premios.forEach(premio => totalProbabilidad += premio.probabilidad);
+      let random = Math.random() * totalProbabilidad;
+      let acumulado = 0;
+      for (let i = 0; i < premios.length; i++) {
+        acumulado += premios[i].probabilidad;
+        if (random <= acumulado) {
+          return premios[i];
+        }
+      }
+    }
+
+    // Control de intentos por usuario utilizando localStorage
+    let intentosRestantes = localStorage.getItem("intentos") ? parseInt(localStorage.getItem("intentos")) : 3;
+
+    function actualizarIntentos() {
+      document.getElementById("intentosRestantes").textContent = `Intentos restantes: ${intentosRestantes}`;
+    }
+
+    actualizarIntentos();
+
+    document.getElementById("botonRuleta").addEventListener("click", function() {
+      if (intentosRestantes > 0) {
+        let premio = obtenerPremio();
+        alert(`¡Felicidades! Has ganado: ${premio.nombre}\n\nDescripción: ${premio.descripcion}\n\nContáctanos: ${premio.contacto}`);
+        intentosRestantes--;
+        localStorage.setItem("intentos", intentosRestantes);
+        actualizarIntentos();
+      } else {
+        alert("Lo siento, ya no tienes más intentos.");
+      }
+    });
+  </script>
+</body>
+</html>
